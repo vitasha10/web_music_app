@@ -329,7 +329,6 @@ if(!isset($_COOKIE['token'])){
             display: block;
             height: 4vh;
             font-size: 2vh;
-            width: 100%;
             color: white;
             line-height: 4vh;
             padding-left: 3vh;
@@ -338,7 +337,6 @@ if(!isset($_COOKIE['token'])){
             display: block;
             height: 10vh;
             font-size: 5vh;
-            width: 100%;
             color: white;
             line-height: 10vh;
             padding-left: 3vh;
