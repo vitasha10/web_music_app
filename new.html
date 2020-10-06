@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="audio.play();">play</button>
+    <button onclick="audio.pause();">pause</button>
+    <button onclick="audio.load();">stop</button>
+    <script>
+        var audio;
+        var usr_token = "8908";
+        var id = "-2001258934_73258934";
+        $.ajax({
+            type: "GET",
+            url: "https://api.vitasha.tk/music/getlinkbyid/"+usr_token+"/?id="+id,
+            dataType: 'text',
+            success: function(data){
+                var array = JSON.parse(data);
+                alert(data);
+                audio = new Audio(array['url']);
+            1}
+        })
+    </script>
+</body>
+</html>
