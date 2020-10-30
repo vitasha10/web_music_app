@@ -407,7 +407,7 @@ if(!isset($_COOKIE['token'])){
         var playlist_new = [];
         function explicit(e){
             if(e){
-                return "<img class='explicit' src='explicit.png' alt='e'>";
+                return "<img class='explicit' src='assets/images/explicit.png' alt='e'>";
             }else{
                 return "";
             }

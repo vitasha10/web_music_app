@@ -3,7 +3,7 @@
 if(isset($_POST['email'])){
     $response = json_decode(file_get_contents("https://api.vitasha.tk/music/signin/free/?email=".$_POST['email']."&password=".$_POST['pass']), true);
     if($response['token'] != null){
-        setcookie("token", $response['token'], time()+3600*24*30);
+        setcookie("token", $response['token'], time()+3600*24*30, '/');
         echo '<a href="/">Go!</a>';
     }else{
         echo "incorrect pass";
