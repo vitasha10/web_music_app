@@ -1,8 +1,8 @@
 <?php
 if(!isset($_COOKIE['token'])){
     header("Location: login/");
-}else{
-
+}else if($_SERVER['REQUEST_URI'] == '/'){
+    //header("Location: /index.php");
 }
 ?>
 <!DOCTYPE html>
@@ -190,11 +190,16 @@ if(!isset($_COOKIE['token'])){
         $("#player_closed_btn_play").on("click", function(ev){
             ev.stopPropagation();
         });
-        if('serviceWorker' in navigator){
+        /*if('serviceWorker' in navigator){
             navigator.serviceWorker.register('assets/js/sw.js')
             .then(reg => console.log('service worker registered'))
             .catch(err => console.log('service worker not registered', err));
-        }
+        }*/
+    }
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js',{
+            scope: '/'
+        });
     }
     </script>
 </body>

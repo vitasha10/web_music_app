@@ -1,7 +1,11 @@
+importScripts("assets/js/workbox-sw.js");
+workbox.core.skipWaiting();
+workbox.core.clientsClaim();
+workbox.routing.registerRoute(/\/$/, new workbox.strategies.StaleWhileRevalidate(), 'GET');
+
 const staticCacheName = 'site-static-v1';
 const assets = [
   '/',
-  '/?source=pwa',
   'assets/images/logo.png',
   'assets/images/play.png',
   'assets/images/pause.png',
@@ -19,6 +23,7 @@ const assets = [
   'assets/fonts/vietnamese.woff2',
   'assets/fonts/Roboto_swap.css',
   'assets/js/jquery.min.js',
+  'manifest.json'
 ];
 // событие install
 self.addEventListener('install', evt => {
@@ -45,32 +50,6 @@ self.addEventListener('fetch', evt => {
   evt.respondWith(
     caches.match(evt.request).then(cacheRes => {
       return cacheRes || fetch(evt.request);
-    })
-  );
-});
-
-const dynamicCacheName = 'site-dynamic-v1';
-// событие activate
-self.addEventListener('activate', evt => {
-  evt.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(keys
-        .filter(key =>  key !== dynamicCacheName)
-        .map(key => caches.delete(key))
-      );
-    })
-  );
-});
-// событие fetch
-self.addEventListener('fetch', evt => {
-  evt.respondWith(
-    caches.match(evt.request).then(cacheRes => {
-      return cacheRes || fetch(evt.request).then(fetchRes => {
-        return caches.open(dynamicCacheName).then(cache => {
-          cache.put(evt.request.url, fetchRes.clone());
-          return fetchRes;
-        })
-      });
     })
   );
 });
