@@ -341,7 +341,7 @@ async function prev(){
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
                 $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
-                document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+                document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -412,7 +412,7 @@ async function next(dd){
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
                 $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
-                document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+                document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -486,7 +486,7 @@ async function next(dd){
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
                 $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
-                document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+                document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -553,7 +553,7 @@ async function next(dd){
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
                 $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
-                document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+                document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -620,7 +620,7 @@ async function getlinkbyid(id){ //fully_first
             $('#player_closed_author').empty();
             $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
             $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
-            document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+            document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
             /*$('#control_window_song').empty();
             $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
             $('#control_window_add_to_playlist').empty();
