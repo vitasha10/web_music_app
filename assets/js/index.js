@@ -57,7 +57,6 @@ function open_news(){
     playlist_now = [];
     for(let i=0; i < playlist_home_news.length; i ++){
         playlist_now[i] = playlist_home_news[i];
-        //document.title = 'Music';
         //const el = document.getElementById('scroll');
         //el.scrollIntoView();
         //Манипуляции с name и author
@@ -226,7 +225,6 @@ async function news(){ //служебное fully
             $('#home_news_div').empty();
             for(let i=0; i < array['songs'].length; i ++){
                 playlist_now[i] = array['songs'][i];
-                //document.title = 'Music';
                 //const el = document.getElementById('scroll');
                 //el.scrollIntoView();
                 //Манипуляции с name и author
@@ -240,20 +238,17 @@ async function news(){ //служебное fully
 }
 function open_main(){ //full
     set_playlist_now('main');
-    document.title = 'Music';
     $('#home').show();
     $('#my').hide();
     $('#settings').hide();
 }
 function open_my(){ //full
     set_playlist_now('my');
-    document.title = 'My';
     $('#home').hide();
     $('#my').show();
     $('#settings').hide();
 }
 function open_settings(){ //full
-    document.title = 'Settings';
     $('#home').hide();
     $('#my').hide();
     $('#settings').show();
@@ -346,6 +341,7 @@ async function prev(){
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
                 $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+                document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -416,6 +412,7 @@ async function next(dd){
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
                 $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+                document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -489,6 +486,7 @@ async function next(dd){
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
                 $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+                document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -507,6 +505,7 @@ async function next(dd){
     }else if(val == 3 && dd == 'no'){
         audio.load();
         audio.pause();
+        document.title = "Vitasha Music";
     }else if(val == 3 && dd == 'yes'){
         is_pause = false;   
         if(playlist_now_played[song_id_playing+1] == undefined){
@@ -554,6 +553,7 @@ async function next(dd){
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
                 $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+                document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -620,6 +620,7 @@ async function getlinkbyid(id){ //fully_first
             $('#player_closed_author').empty();
             $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
             $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+            document.title = laylist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
             /*$('#control_window_song').empty();
             $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
             $('#control_window_add_to_playlist').empty();
@@ -774,7 +775,7 @@ function playlist_open(name_1){
             var array = JSON.parse(data);
             $('#my_main').empty();
             $('#my_playlist_opened_name span').html('Playlist: '+name_1);
-            document.title = 'Playlist: '+name_1;
+            //document.title = 'Playlist: '+name_1;
             for(let i=0; i < array['songs'].length; i ++){
                 playlist_now[i] = array['songs'][i];
                 //document.title = 'Music';

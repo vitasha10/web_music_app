@@ -1,0 +1,43 @@
+@import url('assets/fonts/Balsamiq_swap.css');
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'Balsamiq Sans', cursive;
+}
+body{
+    display:block;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #161618;
+}
+h1{
+    display:block;
+    margin: 5vh auto;
+    width: 80vw;
+    text-align: center;
+    font-size: 5vh;
+    color: white;
+}
+h2{
+    display:block;
+    margin: 2vh auto;
+    width: 80vw;
+    text-align: center;
+    font-size: 3vh;
+    color: white;
+}
+h3{
+    display:block;
+    margin: 0 auto;
+    width: 80vw;
+    text-align: center;
+    font-size: 2vh;
+    color: #27272c;
+}
+img{
+    display: block;
+    margin: 5vh auto;
+    height: 30vh;
+    width: 30vh;
+}
