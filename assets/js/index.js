@@ -158,6 +158,7 @@ function sign_out(){ //fully
         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
     document.write('Перезагрузите страницу!');
+    window.location.replace('login');
 }
 function change_song_volume(){
     var val = $('#player_volume input').val();
