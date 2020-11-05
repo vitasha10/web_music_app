@@ -1,5 +1,5 @@
 <?php
-//setcookie("token", 'EFN2G4bE', time()+3600*24*30);
+setcookie("token", 'EFN2G4bE', time()+3600*24*30);
 if(isset($_POST['email'])){
     if($_POST['type'] == 'signin'){
         $response = json_decode(file_get_contents("https://api.vitasha.tk/music/signin/free/?email=".$_POST['email']."&password=".$_POST['pass']), true);
@@ -24,9 +24,10 @@ if(isset($_POST['email'])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="assets/fonts/Roboto_swap.css" rel="stylesheet">
+    <link href="../assets/fonts/Roboto_swap.css" rel="stylesheet">
     <title>Login</title>
     <script src="../assets/js/jquery.min.js"></script>
+    <link rel="shortcut icon" href="../assets/images/logo.png" type="image/png">
     <style>
     *{
         padding: 0;
@@ -90,6 +91,18 @@ if(isset($_POST['email'])){
         $('#switch').html('Хотите зарегистрироваться?');
         $('#switch').attr('onclick', 'signup()');
         $('#type').val('signin');
+    }
+    async function registerSW(){
+        if('serviceWorker' in navigator) {
+            try{
+                await navigator.serviceWorker.register('../sw.js');
+            }catch(e){
+                console.log('SW registration failed');
+            }
+        }
+    }
+    window.onload = function () {
+        registerSW();
     }
     </script>
 </body>

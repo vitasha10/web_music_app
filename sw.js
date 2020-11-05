@@ -313,7 +313,7 @@ self.addEventListener('fetch', (event) => {
     })());
 });*/
 
-const CACHE_NAME = 'offline';
+const CACHE_NAME = 'offline1.0.0.2';
 const OFFLINE_URL = 'offline.html';
 self.addEventListener('install', (event) => {
   console.log('install');
@@ -332,6 +332,14 @@ self.addEventListener('install', (event) => {
 });
 self.addEventListener('activate', (event) => {
   console.log('activate');
+  event.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(keys
+        .filter(key => key !== CACHE_NAME)
+        .map(key => caches.delete(key))
+      );
+    })
+  );
   event.waitUntil((async () => {
     if ('navigationPreload' in self.registration) {
       await self.registration.navigationPreload.enable();
@@ -356,6 +364,8 @@ self.addEventListener('fetch', (event) => {
       var host = self.location.protocol+"//"+self.location.hostname+'/';
       console.log(host);
       if (event.request.url == host) {
+        cachedResponse = await cache.match(OFFLINE_URL);
+      } else if (event.request.url == host+"login/") {
         cachedResponse = await cache.match(OFFLINE_URL);
       } else {
         cachedResponse = await cache.match(event.request.url);

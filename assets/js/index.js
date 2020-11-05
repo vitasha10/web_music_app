@@ -10,20 +10,73 @@ var playlist_now_played = [];
 var is_open_playlist = false;
 var open_playlist = [];
 var is_open_search = false;
-/*setInterval(() =>  {
+setInterval(() =>  {
     try{
-        $('#player_song_moment input').attr('value',audio.currentTime);
-    }catch{
-
+        $('#player_song_moment input').attr('value',audio.currentTime*10);
+    }catch(e){
+        //
     }
-}, 200);*/
+}, 500);
+function setCookie(cname, cvalue) { //fully
+    var d = new Date();
+    d.setTime(d.getTime() + (30*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+function getCookie(cname) { //fully
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+var usr_token = getCookie('token');
+if(getCookie('volume') == ""){
+    setCookie('volume',100);
+}
+if(getCookie('repeat') == ""){
+    setCookie('repeat',1);
+}
+function is_in_favorites(){
+    $.ajax({
+        type: "GET",
+        url: "https://api.vitasha.tk/music/is_in_favorites/"+usr_token+"/?playlist_name=Favorites&id="+playlist_now_played[song_id_playing]['id'],
+        dataType: 'text',
+        success: function(data){
+            var array = JSON.parse(data);
+            if(array['is_in_favorites']){
+                $('#player_add_to_favorites').html('<span onclick="player_del_from_favorites();">Added to <img src="assets/images/favorites.png" alt="">!</span>')
+            }else{
+                $('#player_add_to_favorites').html('<span onclick="player_add_to_favorites();">Add to <img src="assets/images/favorites.png" alt="">?</span>')
+            }
+        }
+    })
+}
 async function player_add_to_favorites(){
     $.ajax({
         type: "GET",
         url: "https://api.vitasha.tk/music/playlist_add_track/"+usr_token+"/?playlist_name=Favorites&json="+encodeURIComponent(JSON.stringify(playlist_now_played[song_id_playing])),
         dataType: 'text',
         success: function(data){
-            alert('Добавлено');
+            $('#player_add_to_favorites').html('<span onclick="player_del_from_favorites();">Added to <img src="assets/images/favorites.png" alt="">!</span>')
+        }
+    })
+}
+async function player_del_from_favorites(){
+    $.ajax({
+        type: "GET",
+        url: "https://api.vitasha.tk/music/playlist_del_track/"+usr_token+"/?playlist_name=Favorites&song_id="+playlist_now_played[song_id_playing]['id'],
+        dataType: 'text',
+        success: function(data){
+            $('#player_add_to_favorites').html('<span onclick="player_add_to_favorites();">Add to <img src="assets/images/favorites.png" alt="">?</span>')
         }
     })
 }
@@ -64,34 +117,6 @@ function open_news(){
         playlist_home_news[i]['author'] = short_author(playlist_home_news[i]['author']);
         $('#home_news_div').append('<div class="song" onclick="getlinkbyid(\''+playlist_home_news[i]['id']+'\')"><div class="cover"><img src="'+playlist_home_news[i]['cover']+'" alt="cover"></div><div class="song_name"><span>'+playlist_home_news[i]['name']+'</span>'+explicit(playlist_home_news[i]['explicit'])+'</div><div class="song_author"><span>'+playlist_home_news[i]['author']+'</span></div></div>');
     }
-}
-function setCookie(cname, cvalue) { //fully
-    var d = new Date();
-    d.setTime(d.getTime() + (30*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-function getCookie(cname) { //fully
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-var usr_token = getCookie('token');
-if(getCookie('volume') == ""){
-    setCookie('volume',100);
-}
-if(getCookie('repeat') == ""){
-    setCookie('repeat',1);
 }
 function support(){
     var text = $('#support_text').val();
@@ -166,11 +191,11 @@ function change_song_volume(){
     audio.volume = val/100;
 }
 function change_song_moment(){
-    audio.currentTime = $('#player_song_moment input').val();
+    audio.currentTime = $('#player_song_moment input').val()/10;
     $('#player_song_moment').empty();
-    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration+'" value="'+audio.currentTime+'" onchange="change_song_moment()">');
+    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration*10+'" value="'+audio.currentTime*10+'" onchange="change_song_moment()">');
     audio.ontimeupdate = function() {
-        $('#player_song_moment input').attr('value',audio.currentTime);
+        $('#player_song_moment input').attr('value',audio.currentTime*10);
     };
 }
 function player(){
@@ -313,9 +338,9 @@ async function prev(){
                     audio.load();
                     audio.currentTime = 0;
                     $('#player_song_moment').empty();
-                    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration+'" value="'+audio.currentTime+'" onchange="change_song_moment()">');
+                    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration*10+'" value="'+audio.currentTime*10+'" onchange="change_song_moment()">');
                     audio.ontimeupdate = function() {
-                        $('#player_song_moment input').attr('value',audio.currentTime);
+                        $('#player_song_moment input').attr('value',audio.currentTime*10);
                     };
                 }catch{
                     //
@@ -341,8 +366,9 @@ async function prev(){
                 $('#player_closed_name').append('<span>'+playlist_now_played[song_id_playing]['name']+'</span>');
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
-                $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+                $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']*10);
                 document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+                is_in_favorites();
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -351,7 +377,7 @@ async function prev(){
                 $('#control_window_add_to_playlist').append('<button onclick="add_to_favorites(\''+playlist[0]['name']+'\', \''+playlist[0]['author']+'\', \''+playlist[0]['id']+'\', \''+playlist[0]['cover']+'\', \''+playlist[0]['cover_xl']+'\', \''+playlist[0]['explicit']+'\')">Add to favorites</button>');
                 */
                 audio.ontimeupdate = function() {
-                    $('#player_song_moment input').attr('value',audio.currentTime);
+                    $('#player_song_moment input').attr('value',audio.currentTime*10);
                 };
                 audio.addEventListener('ended', (event) => {
                 next('no');
@@ -384,9 +410,9 @@ async function next(dd){
                     audio.load();
                     audio.currentTime = 0;
                     $('#player_song_moment').empty();
-                    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration+'" value="'+audio.currentTime+'" onchange="change_song_moment()">');
+                    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration*10+'" value="'+audio.currentTime*10+'" onchange="change_song_moment()">');
                     audio.ontimeupdate = function() {
-                        $('#player_song_moment input').attr('value',audio.currentTime);
+                        $('#player_song_moment input').attr('value',audio.currentTime*10);
                     };
                 }catch{
                     //
@@ -412,8 +438,9 @@ async function next(dd){
                 $('#player_closed_name').append('<span>'+playlist_now_played[song_id_playing]['name']+'</span>');
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
-                $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+                $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']*10);
                 document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+                is_in_favorites();
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -422,7 +449,7 @@ async function next(dd){
                 $('#control_window_add_to_playlist').append('<button onclick="add_to_favorites(\''+playlist[0]['name']+'\', \''+playlist[0]['author']+'\', \''+playlist[0]['id']+'\', \''+playlist[0]['cover']+'\', \''+playlist[0]['cover_xl']+'\', \''+playlist[0]['explicit']+'\')">Add to favorites</button>');
                 */
                 audio.ontimeupdate = function() {
-                    $('#player_song_moment input').attr('value',audio.currentTime);
+                    $('#player_song_moment input').attr('value',audio.currentTime*10);
                 };
                 audio.addEventListener('ended', (event) => {
                 next('no');
@@ -435,7 +462,7 @@ async function next(dd){
         audio.play();
         $('#player_song_moment input').attr('value',0);
         audio.ontimeupdate = function() {
-            $('#player_song_moment input').attr('value',audio.currentTime);
+            $('#player_song_moment input').attr('value',audio.currentTime*10);
         };
         audio.addEventListener('ended', (event) => {
         next('no');
@@ -458,9 +485,9 @@ async function next(dd){
                     audio.load();
                     audio.currentTime = 0;
                     $('#player_song_moment').empty();
-                    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration+'" value="'+audio.currentTime+'" onchange="change_song_moment()">');
+                    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration*10+'" value="'+audio.currentTime*10+'" onchange="change_song_moment()">');
                     audio.ontimeupdate = function() {
-                        $('#player_song_moment input').attr('value',audio.currentTime);
+                        $('#player_song_moment input').attr('value',audio.currentTime*10);
                     };
                 }catch{
                     //
@@ -486,8 +513,9 @@ async function next(dd){
                 $('#player_closed_name').append('<span>'+playlist_now_played[song_id_playing]['name']+'</span>');
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
-                $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+                $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']*10);
                 document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+                is_in_favorites();
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -496,7 +524,7 @@ async function next(dd){
                 $('#control_window_add_to_playlist').append('<button onclick="add_to_favorites(\''+playlist[0]['name']+'\', \''+playlist[0]['author']+'\', \''+playlist[0]['id']+'\', \''+playlist[0]['cover']+'\', \''+playlist[0]['cover_xl']+'\', \''+playlist[0]['explicit']+'\')">Add to favorites</button>');
                 */
                 audio.ontimeupdate = function() {
-                    $('#player_song_moment input').attr('value',audio.currentTime);
+                    $('#player_song_moment input').attr('value',audio.currentTime*10);
                 };
                 audio.addEventListener('ended', (event) => {
                 next('no');
@@ -525,9 +553,9 @@ async function next(dd){
                     audio.load();
                     audio.currentTime = 0;
                     $('#player_song_moment').empty();
-                    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration+'" value="'+audio.currentTime+'" onchange="change_song_moment()">');
+                    $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration*10+'" value="'+audio.currentTime*10+'" onchange="change_song_moment()">');
                     audio.ontimeupdate = function() {
-                        $('#player_song_moment input').attr('value',audio.currentTime);
+                        $('#player_song_moment input').attr('value',audio.currentTime*10);
                     };
                 }catch{
                     //
@@ -553,8 +581,9 @@ async function next(dd){
                 $('#player_closed_name').append('<span>'+playlist_now_played[song_id_playing]['name']+'</span>');
                 $('#player_closed_author').empty();
                 $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
-                $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+                $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']*10);
                 document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+                is_in_favorites();
                 /*$('#control_window_song').empty();
                 $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
                 $('#control_window_add_to_playlist').empty();
@@ -563,7 +592,7 @@ async function next(dd){
                 $('#control_window_add_to_playlist').append('<button onclick="add_to_favorites(\''+playlist[0]['name']+'\', \''+playlist[0]['author']+'\', \''+playlist[0]['id']+'\', \''+playlist[0]['cover']+'\', \''+playlist[0]['cover_xl']+'\', \''+playlist[0]['explicit']+'\')">Add to favorites</button>');
                 */
                 audio.ontimeupdate = function() {
-                    $('#player_song_moment input').attr('value',audio.currentTime);
+                    $('#player_song_moment input').attr('value',audio.currentTime*10);
                 };
                 audio.addEventListener('ended', (event) => {
                 next('no');
@@ -591,9 +620,9 @@ async function getlinkbyid(id){ //fully_first
         audio.load();
         audio.currentTime = 0;
         $('#player_song_moment').empty();
-        $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration+'" value="'+audio.currentTime+'" onchange="change_song_moment()">');
+        $('#player_song_moment').append('<label for="player_song_moment_input">Песня</label><br><input id="player_song_moment_input" type="range" min="0" max="'+audio.duration*10+'" value="'+audio.currentTime*10+'" onchange="change_song_moment()">');
         audio.ontimeupdate = function() {
-            $('#player_song_moment input').attr('value',audio.currentTime);
+            $('#player_song_moment input').attr('value',audio.currentTime*10);
         };
     }catch{
         console.log('no song was playing');
@@ -620,8 +649,9 @@ async function getlinkbyid(id){ //fully_first
             $('#player_closed_name').append('<span>'+playlist_now_played[song_id_playing]['name']+'</span>');
             $('#player_closed_author').empty();
             $('#player_closed_author').append('<span>'+playlist_now_played[song_id_playing]['author']+'</span>');
-            $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']);
+            $('#player_song_moment input').attr('max',playlist_now_played[song_id_playing]['duration']*10);
             document.title = playlist_now_played[song_id_playing]['name']+" | "+playlist_now_played[song_id_playing]['author'];
+            is_in_favorites();
             /*$('#control_window_song').empty();
             $('#control_window_song').append('<audio src="'+array['url']+'" controls autoplay onended="next()"></audio>');
             $('#control_window_add_to_playlist').empty();
@@ -644,7 +674,7 @@ async function getlinkbyid(id){ //fully_first
             $('#player_volume input').val(getCookie('volume'));
             audio.volume = getCookie('volume')/100;
             audio.ontimeupdate = function() {
-                $('#player_song_moment input').attr('value',audio.currentTime);
+                $('#player_song_moment input').attr('value',audio.currentTime*10);
             };
             audio.addEventListener('ended', (event) => {
             next('no');
@@ -679,71 +709,75 @@ function add_to_favorites(name, author, id, cover, cover_xl, explicit){
     })
 }
 async function search(){
-    is_open_search = true;
-    search_history_hide();
     var search = $("#search_field").val();
-    $.ajax({
-        type: "GET",
-        url: "https://api.vitasha.tk/music/search/"+usr_token+"/?search="+search,
-        dataType: 'text',
-        /*
-        success: function(data){
-            var array = JSON.parse(data);
-            $('main').empty();
-            playlist_new = [];
-            for(let i=0; i < array['songs'].length; i ++){
-                playlist_new[i] = array['songs'][i];
-                document.title = search;
-                const el = document.getElementById('scroll');
-                el.scrollIntoView();
-                var name = array['songs'][i]['name'];
-                name = name.substr(0, 25);
-                if(name !== array['songs'][i]['name']){
-                    array['songs'][i]['name'] = name+" ...";
+    if(search !== ""){
+        is_open_search = true;
+        search_history_hide();
+        $.ajax({
+            type: "GET",
+            url: "https://api.vitasha.tk/music/search/"+usr_token+"/?search="+search,
+            dataType: 'text',
+            /*
+            success: function(data){
+                var array = JSON.parse(data);
+                $('main').empty();
+                playlist_new = [];
+                for(let i=0; i < array['songs'].length; i ++){
+                    playlist_new[i] = array['songs'][i];
+                    document.title = search;
+                    const el = document.getElementById('scroll');
+                    el.scrollIntoView();
+                    var name = array['songs'][i]['name'];
+                    name = name.substr(0, 25);
+                    if(name !== array['songs'][i]['name']){
+                        array['songs'][i]['name'] = name+" ...";
+                    }
+                    var author = array['songs'][i]['author'];
+                    author = author.substr(0, 35);
+                    if(author !== array['songs'][i]['author']){
+                        array['songs'][i]['author'] = author+" ...";
+                    }
+                    //$('#songs').append('<div class="song"><div class="cover"><img src="'+array['songs'][i]['cover']+'" alt=""></div><div class="song_name"><span>'+array['songs'][i]['name']+'</span>'+explicit(array['songs'][i]['explicit'])+'</div><div class="song_author"><span>'+array['songs'][i]['author']+'</span></div><div class="play"><input type="submit" value="Play" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')"></div></div>');
+                    $('main').append('<div class="song" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')"><div class="cover"><img src="'+array['songs'][i]['cover']+'" alt=""></div><div class="song_name"><span>'+array['songs'][i]['name']+'</span>'+explicit(array['songs'][i]['explicit'])+'</div><div class="song_author"><span>'+array['songs'][i]['author']+'</span></div></div>');
+                    //$('#songs').append('<div class="song"><img id="cover" src="'+array['songs'][i]['cover']+'" alt="cover"><p>'+array['songs'][i]['name']+explicit(array['songs'][i]['explicit'])+"<br>"+array['songs'][i]['author']+'</p>'+'<input class="song_id" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')" value="Play"></div>');
                 }
-                var author = array['songs'][i]['author'];
-                author = author.substr(0, 35);
-                if(author !== array['songs'][i]['author']){
-                    array['songs'][i]['author'] = author+" ...";
+            }*/
+            success: function(data){/*
+                var array = JSON.parse(data);
+                $('#home_news_div').empty();
+                for(let i=0; i < array['songs'].length; i ++){
+                    playlist_now[i] = array['songs'][i];
+                    //document.title = 'Music';
+                    //const el = document.getElementById('scroll');
+                    //el.scrollIntoView();
+                    //Манипуляции с name и author
+                    array['songs'][i]['name'] = short_name(array['songs'][i]['name']);
+                    array['songs'][i]['author'] = short_author(array['songs'][i]['author']);
+                    $('#home_news_div').append('<div class="song" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')"><div class="cover"><img src="'+array['songs'][i]['cover']+'" alt="cover"></div><div class="song_name"><span>'+array['songs'][i]['name']+'</span>'+explicit(array['songs'][i]['explicit'])+'</div><div class="song_author"><span>'+array['songs'][i]['author']+'</span></div></div>');
                 }
-                //$('#songs').append('<div class="song"><div class="cover"><img src="'+array['songs'][i]['cover']+'" alt=""></div><div class="song_name"><span>'+array['songs'][i]['name']+'</span>'+explicit(array['songs'][i]['explicit'])+'</div><div class="song_author"><span>'+array['songs'][i]['author']+'</span></div><div class="play"><input type="submit" value="Play" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')"></div></div>');
-                $('main').append('<div class="song" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')"><div class="cover"><img src="'+array['songs'][i]['cover']+'" alt=""></div><div class="song_name"><span>'+array['songs'][i]['name']+'</span>'+explicit(array['songs'][i]['explicit'])+'</div><div class="song_author"><span>'+array['songs'][i]['author']+'</span></div></div>');
-                //$('#songs').append('<div class="song"><img id="cover" src="'+array['songs'][i]['cover']+'" alt="cover"><p>'+array['songs'][i]['name']+explicit(array['songs'][i]['explicit'])+"<br>"+array['songs'][i]['author']+'</p>'+'<input class="song_id" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')" value="Play"></div>');
+                playlist_home_news = playlist_now;
+                */
+                var playlist_now1 = [];
+                var array = JSON.parse(data);
+                $('#home_news_div').empty();
+                for(let i=0; i < array['songs'].length; i ++){
+                    playlist_now1[i] = array['songs'][i];
+                    //document.title = 'Music';
+                    //const el = document.getElementById('scroll');
+                    //el.scrollIntoView();
+                    //Манипуляции с name и author
+                    array['songs'][i]['name'] = short_name(array['songs'][i]['name']);
+                    array['songs'][i]['author'] = short_author(array['songs'][i]['author']);
+                    $('#home_news_div').append('<div class="song" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')"><div class="cover"><img src="'+array['songs'][i]['cover']+'" alt="cover"></div><div class="song_name"><span>'+array['songs'][i]['name']+'</span>'+explicit(array['songs'][i]['explicit'])+'</div><div class="song_author"><span>'+array['songs'][i]['author']+'</span></div></div>');
+                }
+                playlist_now = playlist_now1.slice();
+                console.log(playlist_now);
             }
-        }*/
-        success: function(data){/*
-            var array = JSON.parse(data);
-            $('#home_news_div').empty();
-            for(let i=0; i < array['songs'].length; i ++){
-                playlist_now[i] = array['songs'][i];
-                //document.title = 'Music';
-                //const el = document.getElementById('scroll');
-                //el.scrollIntoView();
-                //Манипуляции с name и author
-                array['songs'][i]['name'] = short_name(array['songs'][i]['name']);
-                array['songs'][i]['author'] = short_author(array['songs'][i]['author']);
-                $('#home_news_div').append('<div class="song" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')"><div class="cover"><img src="'+array['songs'][i]['cover']+'" alt="cover"></div><div class="song_name"><span>'+array['songs'][i]['name']+'</span>'+explicit(array['songs'][i]['explicit'])+'</div><div class="song_author"><span>'+array['songs'][i]['author']+'</span></div></div>');
-            }
-            playlist_home_news = playlist_now;
-            */
-            var playlist_now1 = [];
-            var array = JSON.parse(data);
-            $('#home_news_div').empty();
-            for(let i=0; i < array['songs'].length; i ++){
-                playlist_now1[i] = array['songs'][i];
-                //document.title = 'Music';
-                //const el = document.getElementById('scroll');
-                //el.scrollIntoView();
-                //Манипуляции с name и author
-                array['songs'][i]['name'] = short_name(array['songs'][i]['name']);
-                array['songs'][i]['author'] = short_author(array['songs'][i]['author']);
-                $('#home_news_div').append('<div class="song" onclick="getlinkbyid(\''+array['songs'][i]['id']+'\')"><div class="cover"><img src="'+array['songs'][i]['cover']+'" alt="cover"></div><div class="song_name"><span>'+array['songs'][i]['name']+'</span>'+explicit(array['songs'][i]['explicit'])+'</div><div class="song_author"><span>'+array['songs'][i]['author']+'</span></div></div>');
-            }
-            playlist_now = playlist_now1.slice();
-            console.log(playlist_now);
-        }
-        
-    })
+            
+        })
+    }else{
+        search_history_show();
+    }
 }
 async function my(){
     is_open_playlist = false;

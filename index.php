@@ -52,14 +52,14 @@ if(!isset($_COOKIE['token'])){
     <div id="search_history"></div>
     <div id="home">
         <div id="search">
-            <div class="search_news_btn">
-                <button id="news_btn" onclick="open_news()"><img src="assets/images/home.png" alt="home"></button>
+            <div class="search_news_btn" onclick="open_news()">
+                <div id="news_btn"><img src="assets/images/home.png" alt="home"></div>
             </div>
             <div class="search_field_div">
                 <input type="text" name="search_field_input" id="search_field" autocomplete="off" onclick="search_history_show();" placeholder="Search...">
             </div>
-            <div class="search_search_btn">
-                <button id="search_btn" onclick="search()"><img src="assets/images/search.png" alt="search"></button>
+            <div class="search_search_btn" onclick="search()">
+                <div id="search_btn"><img src="assets/images/search.png" alt="search"></div>
             </div>
         </div>
         <div id="home_news_div">
@@ -69,14 +69,14 @@ if(!isset($_COOKIE['token'])){
     </div>
     <div id="my">
         <div id="my_header">
-            <div id="my_home">
-                <button id="reopen_my_btn" onclick="my()"><img src="assets/images/home.png" alt="home"></button>
+            <div id="my_home" onclick="my()">
+                <div id="reopen_my_btn"><img src="assets/images/home.png" alt="home"></div>
             </div>
             <div id="my_playlist_opened_name">
                 <span>Open playlist</span>
             </div>
-            <div id="refresh_my">
-                <button id="refresh_my_btn" onclick="refresh_my()">Refresh</button>
+            <div id="refresh_my" onclick="refresh_my()">
+                <div id="refresh_my_btn">Refresh</div>
             </div>
         </div>
         <div id="my_main">
@@ -145,7 +145,7 @@ if(!isset($_COOKIE['token'])){
             <button onclick="type_song_playing();"><!-- repeat track/repeat playlist/no repeat --></button>
         </div>
         <div id="player_add_to_favorites">
-            <button onclick="player_add_to_favorites();">Add to favorites</button>
+
         </div>
     </div>
     <div id="under_player_closed">
