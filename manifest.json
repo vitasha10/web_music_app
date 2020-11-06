@@ -7,6 +7,7 @@
     "background_color": "#161618",
     "theme_color": "#161618", 
     "orientation": "portrait-primary",
+    "manifest_version": 42,
     "icons": [ 
       {
         "src": "assets/images/logo.png",

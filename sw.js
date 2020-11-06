@@ -313,7 +313,7 @@ self.addEventListener('fetch', (event) => {
     })());
 });*/
 
-const CACHE_NAME = 'offline1.0.0.2';
+const CACHE_NAME = 'offline1.0.0.3';
 const OFFLINE_URL = 'offline.html';
 self.addEventListener('install', (event) => {
   console.log('install');
