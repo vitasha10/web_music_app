@@ -322,7 +322,7 @@ self.addEventListener('install', (event) => {
     await cache.add(new Request(OFFLINE_URL, { cache: 'reload' }));
     await cache.addAll([
       'assets/images/logo.png',
-      'assets/image/logo_black.png',
+      'assets/images/logo_black.png',
       'assets/css/offline.css',
       'assets/fonts/Balsamiq_swap.css',
       'assets/images/smiley.png',
