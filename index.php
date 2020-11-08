@@ -32,7 +32,7 @@ if(!isset($_COOKIE['token'])){
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/index.js"></script>
     <!-- manifest for pwa -->
-    <link rel="manifest" href="manifest1.json">
+    <link rel="manifest" href="manifest2.json">
     <link rel="apple-touch-icon" href="assets/images/logo_black.png">
     <!-- favicon -->
     <link rel="shortcut icon" href="assets/images/logo.png" type="image/png">
