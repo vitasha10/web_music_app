@@ -717,3 +717,12 @@ footer{
     font-size: 3vh;
     padding: 3vh;
 }
+#version{
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 2vh;
+    height: 3vh;
+    margin-top: 1vh;
+}

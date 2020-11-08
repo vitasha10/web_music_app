@@ -109,6 +109,7 @@ if(!isset($_COOKIE['token'])){
                 <button onclick="support()">Отправить</button>
             </div>
         <button onclick="sign_out()" id="sign_out">Выйти</button>
+        <span id="version">beta 1.2</span>
     </div>
     <div id="player">
         <div id="player_close_btn" onclick="player();">
