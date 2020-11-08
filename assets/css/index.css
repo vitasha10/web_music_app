@@ -718,7 +718,6 @@ footer{
     padding: 3vh;
 }
 #version{
-    display: block;
     width: 100%;
     text-align: center;
     color: white;
