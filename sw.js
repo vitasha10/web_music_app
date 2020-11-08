@@ -313,7 +313,7 @@ self.addEventListener('fetch', (event) => {
     })());
 });*/
 
-const CACHE_NAME = 'offline1.0.0.4';
+const CACHE_NAME = 'offline1.0.0.5';
 const OFFLINE_URL = 'offline.html';
 self.addEventListener('install', (event) => {
   console.log('install');
@@ -322,6 +322,7 @@ self.addEventListener('install', (event) => {
     await cache.add(new Request(OFFLINE_URL, { cache: 'reload' }));
     await cache.addAll([
       'assets/images/logo.png',
+      'assets/image/logo_black.png',
       'assets/css/offline.css',
       'assets/fonts/Balsamiq_swap.css',
       'assets/images/smiley.png',

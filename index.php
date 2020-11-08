@@ -22,6 +22,7 @@ if(!isset($_COOKIE['token'])){
     <meta name="theme-color" content="#27272c">
     <!-- images -->
     <link href="assets/images/logo.png" as="image">
+    <link href="assets/images/logo_black.png" as="image">
     <link href="assets/images/play.png" as="image">
     <link href="assets/images/pause.png" as="image">
     <link href="assets/images/home.png" as="image">
@@ -32,7 +33,7 @@ if(!isset($_COOKIE['token'])){
     <script src="assets/js/index.js"></script>
     <!-- manifest for pwa -->
     <link rel="manifest" href="manifest1.json">
-    <link rel="apple-touch-icon" href="assets/images/logo.png">
+    <link rel="apple-touch-icon" href="assets/images/logo_black.png">
     <!-- favicon -->
     <link rel="shortcut icon" href="assets/images/logo.png" type="image/png">
 </head>

@@ -7,10 +7,10 @@
     "background_color": "#161618",
     "theme_color": "#161618", 
     "orientation": "portrait-primary",
-    "manifest_version": 43,
+    "manifest_version": 44,
     "icons": [ 
       {
-        "src": "assets/images/logo.png",
+        "src": "assets/images/logo_black.png",
         "type": "image/png",
         "sizes": "512x512",
         "purpose": "any maskable"
