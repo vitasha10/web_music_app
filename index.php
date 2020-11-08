@@ -180,28 +180,12 @@ if(!isset($_COOKIE['token'])){
     async function registerSW(){
         if('serviceWorker' in navigator) {
             try{
-                await navigator.serviceWorker.register('sw.js');
+                await navigator.serviceWorker.register('sw.js?new1');
             }catch(e){
                 console.log('SW registration failed');
             }
         }
     }
-    /*window.addEventListener('load', e => {
-        new PWAConfApp();
-        registerSW(); 
-        });
-        async function registerSW() { 
-        if ('serviceWorker' in navigator) { 
-            try {
-            await navigator.serviceWorker.register('sw.js'); 
-            console.log('loaded sw.js');
-            } catch (e) {
-            alert('ServiceWorker registration failed. Sorry about that.'); 
-            }
-        } else {
-            document.querySelector('.alert').removeAttribute('hidden'); 
-        }
-    }*/
     window.onload = function () {
         $('#preloader').remove();
         my();
@@ -216,11 +200,6 @@ if(!isset($_COOKIE['token'])){
         $("#player_closed_btn_play").on("click", function(ev){
             ev.stopPropagation();
         });
-        /*if('serviceWorker' in navigator){
-            navigator.serviceWorker.register('assets/js/sw.js')
-            .then(reg => console.log('service worker registered'))
-            .catch(err => console.log('service worker not registered', err));
-        }*/
         registerSW();
     }
     </script>
